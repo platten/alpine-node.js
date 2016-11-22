@@ -2,13 +2,18 @@ FROM alpine:3.4
 
 MAINTAINER Paul Pietkiewicz <paul.pietkiewicz@nike.com>
 
-# ENV VERSION=v6.9.1 NPM_VERSION=3
-ENV VERSION=v7.1.0 NPM_VERSION=3
+ENV VERSION=v6.9.1 NPM_VERSION=3
+#ENV VERSION=v7.1.0 NPM_VERSION=3
+ENV NPM_CONFIG_LOGLEVEL info
 
 ENV CONFIG_FLAGS="--fully-static --without-npm" DEL_PKGS="libgcc libstdc++" RM_DIRS=/usr/include
 
-RUN apk add --no-cache curl make gcc g++ python linux-headers paxctl libgcc libstdc++ gnupg && \
-  gpg --keyserver ha.pool.sks-keyservers.net --recv-keys \
+
+RUN addgroup -S node && \
+    adduser -D -S -h /var/cache/node -s /sbin/nologin -G node node && \
+    apk --no-cache upgrade && \
+    apk add --no-cache curl make gcc g++ python linux-headers paxctl libgcc libstdc++ gnupg && \
+    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys \
     9554F04D7259F04124DE6B476D5A82AC7E37093B \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
     0034A06D9D9B0064CE8ADF6BF1747F4AD2306D93 \
@@ -19,8 +24,8 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers paxctl libgcc libs
     B9AE9905FFD7803F25714661B63B535A4C206CA9 && \
   curl -o node-${VERSION}.tar.gz -sSL https://nodejs.org/dist/${VERSION}/node-${VERSION}.tar.gz && \
   curl -o SHASUMS256.txt.asc -sSL https://nodejs.org/dist/${VERSION}/SHASUMS256.txt.asc && \
-  gpg --verify SHASUMS256.txt.asc && \
-  grep node-${VERSION}.tar.gz SHASUMS256.txt.asc | sha256sum -c - && \
+  gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \ && \
+  grep " node-v$NODE_VERSION.tar.gz\$" SHASUMS256.txt | sha256sum -c - && \
   tar -zxf node-${VERSION}.tar.gz && \
   cd node-${VERSION} && \
   export GYP_DEFINES="linux_use_gold_flags=0" && \
@@ -40,3 +45,5 @@ RUN apk add --no-cache curl make gcc g++ python linux-headers paxctl libgcc libs
   rm -rf /etc/ssl /node-${VERSION}.tar.gz /SHASUMS256.txt.asc /node-${VERSION} ${RM_DIRS} \
     /usr/share/man /tmp/* /var/cache/apk/* /root/.npm /root/.node-gyp /root/.gnupg \
     /usr/lib/node_modules/npm/man /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html
+
+CMD [ "node" ]
