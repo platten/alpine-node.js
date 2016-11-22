@@ -27,8 +27,8 @@ RUN addgroup -S node && \
     done && \
     curl -o node-${VERSION}.tar.gz -sSL https://nodejs.org/dist/${VERSION}/node-${VERSION}.tar.gz && \
     curl -o SHASUMS256.txt.asc -sSL https://nodejs.org/dist/${VERSION}/SHASUMS256.txt.asc && \
-    gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \ && \
-    grep " node-v$NODE_VERSION.tar.gz\$" SHASUMS256.txt | sha256sum -c - && \
+    gpg --verify SHASUMS256.txt.asc && \
+    grep node-${VERSION}.tar.gz SHASUMS256.txt.asc | sha256sum -c - && \
     tar -zxf node-${VERSION}.tar.gz && \
     cd node-${VERSION} && \
     export GYP_DEFINES="linux_use_gold_flags=0" && \
