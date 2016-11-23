@@ -8,18 +8,22 @@ Node.js internally uses the Google V8 JavaScript engine to execute code; a large
 
 
 ## How to use this image
-Create a Dockerfile in your Node.js app project
+
+Create a Dockerfile in your Node.js app project:
+
 ```
-FROM node:4-onbuild
+FROM platten/alpine-node.js
 # replace this with your application's default port
 EXPOSE 8888
 ```
 
 You can then build and run the Docker image:
 
-```$ docker build -t my-nodejs-app .
+```
+$ docker build -t my-nodejs-app .
 $ docker run -it --rm --name my-running-app my-nodejs-app
 ```
+
 > *Note:*
 > The image assumes that your application has a file named package.json listing its dependencies and defining its start script.
 
