@@ -30,7 +30,7 @@ $ docker run -it --rm --name my-running-app my-nodejs-app
 ## Run a single Node.js script
 For many simple, single file projects, you may find it inconvenient to write a complete Dockerfile. In such cases, you can run a Node.js script by using the Node.js Docker image directly:
 
-$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/src/app node:4 node your-daemon-or-script.js
+`$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/src/app node:4 node your-daemon-or-script.js`
 
 ## Image Details
 This image is based on the popular Alpine Linux project, available in the alpine official image. Alpine Linux is much smaller than most distribution base images (~5MB), and thus leads to much slimmer images in general.
