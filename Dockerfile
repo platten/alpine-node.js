@@ -2,7 +2,7 @@ FROM alpine:3.4
 
 MAINTAINER Paul Pietkiewicz <paul.pietkiewicz@nike.com>
 
-ENV VERSION=v6.9.1 NPM_VERSION=3
+ENV VERSION=v6.9.4 NPM_VERSION=3
 #ENV VERSION=v7.1.0 NPM_VERSION=3
 ENV NPM_CONFIG_LOGLEVEL info
 
